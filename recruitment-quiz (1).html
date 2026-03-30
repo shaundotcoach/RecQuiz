@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Pressure Check — SDC Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Jost:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  /*
+    FONT NOTE: Replace Playfair Display / Jost with @font-face Kessel
+    declarations (copied from index.html) when deploying to GitHub Pages.
+  */
+
+  :root {
+    --navy: #363657;
+    --deep: #1A1A2E;
+    --pink: #D95773;
+    --pink-hot: #D95773;
+    --warm: #F7F4F2;
+    --white: #FFFFFF;
+    --muted: rgba(54, 54, 87, 0.55);
+    --muted-light: rgba(247, 244, 242, 0.5);
+    --line: rgba(54, 54, 87, 0.12);
+    --line-light: rgba(247, 244, 242, 0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    min-height: 100vh;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ═══════════════════════════════════
+     DARK — version select + hero
+  ═══════════════════════════════════ */
+  .shell-dark {
+    position: relative;
+    z-index: 1;
+    background: var(--navy);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  .dark-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px 0;
+    margin-bottom: 48px;
+  }
+  .logo-mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm);
+    opacity: 0.45;
+  }
+  .logo-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--pink);
+    opacity: 1;
+  }
+
+  .hero {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 24px 52px;
+    text-align: center;
+    border-bottom: 1px solid var(--line-light);
+    margin-bottom: 52px;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 7vw, 54px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--warm);
+    margin-bottom: 8px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: rgba(247,244,242,0.4);
+    display: block;
+    font-size: 0.82em;
+  }
+  .hero-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(247,244,242,0.55);
+    max-width: 400px;
+    margin: 20px auto 0;
+    line-height: 1.8;
+  }
+
+  .version-section {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .version-prompt {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(247,244,242,0.3);
+    margin-bottom: 20px;
+  }
+  .version-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .version-card {
+    background: rgba(247,244,242,0.04);
+    border: 1.5px solid var(--line-light);
+    border-radius: 12px;
+    padding: 28px 22px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+  }
+  .version-card:hover {
+    background: rgba(217,87,115,0.08);
+    border-color: rgba(217,87,115,0.45);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+  }
+  .version-card-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 10px;
+  }
+  .version-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--warm);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .version-card-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--muted-light);
+    line-height: 1.55;
+  }
+
+  /* ═══════════════════════════════════
+     LIGHT — intro, quiz, results
+  ═══════════════════════════════════ */
+  .shell-light {
+    position: relative;
+    z-index: 1;
+    background: var(--warm);
+    min-height: 100vh;
+    padding-bottom: 100px;
+  }
+
+  .light-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px 0;
+    margin-bottom: 48px;
+  }
+  .logo-mark-light {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--navy);
+    opacity: 0.4;
+  }
+
+  .shell-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* intro */
+  .intro-hero {
+    text-align: center;
+    padding: 0 0 52px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 52px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .intro-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--pink-hot);
+    margin-bottom: 24px;
+  }
+  .intro-hero h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 6vw, 46px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .intro-hero h2 em {
+    font-style: italic;
+    font-weight: 400;
+    color: #6B6B8A;
+    display: block;
+    font-size: 0.82em;
+  }
+  .intro-hero p {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--navy);
+    max-width: 420px;
+    margin: 20px auto 0;
+    line-height: 1.8;
+  }
+
+  .intro-features {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 380px;
+    margin: 0 auto 44px;
+    text-align: left;
+    animation: fadeUp 0.5s 0.1s ease both;
+  }
+  .intro-feat {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--navy);
+    line-height: 1.55;
+  }
+  .feat-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--pink);
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  .intro-cta {
+    text-align: center;
+    margin-bottom: 44px;
+    animation: fadeUp 0.5s 0.2s ease both;
+  }
+
+  /* spinning CTA button */
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+  @keyframes spin-ring { to { --angle: 360deg; } }
+
+  .btn-start-wrap {
+    position: relative;
+    display: inline-block;
+    border-radius: 8px;
+    padding: 3px;
+    background: conic-gradient(from var(--angle), #D95773, #F7F4F2, #D95773, #F7F4F2, #D95773);
+    animation: spin-ring 3s linear infinite;
+  }
+  .btn-start {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 52px;
+    background: #D95773;
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    position: relative;
+    z-index: 1;
+  }
+  .btn-start:hover { background: #c04a63; transform: translateY(-1px); }
+  .time-note {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--muted);
+    margin-top: 14px;
+    letter-spacing: 0.04em;
+  }
+
+  /* progress */
+  .progress-wrap { margin-bottom: 44px; }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .progress-qnum {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .progress-version {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pink-hot);
+  }
+  .progress-track {
+    height: 2px;
+    background: var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--navy), var(--pink));
+    border-radius: 2px;
+    transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* question */
+  .q-card { animation: fadeUp 0.35s ease both; }
+  .q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 4.5vw, 30px);
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--navy);
+    margin-bottom: 36px;
+  }
+
+  .options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  .o-btn {
+    width: 100%;
+    background: var(--white);
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    padding: 16px 20px;
+    text-align: left;
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--navy);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    line-height: 1.45;
+    position: relative;
+  }
+  .o-btn::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 3px 0 0 3px;
+    background: var(--pink);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .o-btn:hover { border-color: var(--navy); box-shadow: 0 4px 16px rgba(54,54,87,0.08); }
+    .o-btn:hover::before { opacity: 1; }
+  }
+  .o-btn.selected {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+    box-shadow: 0 6px 20px rgba(54,54,87,0.2);
+  }
+  .o-btn.selected::before { opacity: 0; }
+
+  .btn-back {
+    background: none;
+    border: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 8px 0;
+    transition: color 0.15s;
+  }
+  .btn-back:hover { color: var(--navy); }
+
+  /* results */
+  .results { animation: fadeUp 0.5s ease both; }
+
+  .result-hero {
+    background: var(--navy);
+    border-radius: 16px;
+    padding: 48px 40px;
+    text-align: center;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .result-hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: var(--pink);
+    opacity: 0.07;
+  }
+  .result-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -40px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: var(--pink);
+    opacity: 0.04;
+  }
+  .result-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 20px;
+    position: relative; z-index: 1;
+  }
+  .result-version-label {
+    font-size: 12px;
+    font-weight: 300;
+    color: rgba(247,244,242,0.3);
+    margin-bottom: 6px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    position: relative; z-index: 1;
+  }
+  .result-tier {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 6vw, 46px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 4px;
+    position: relative; z-index: 1;
+  }
+  .result-tier em { font-style: italic; color: var(--pink); }
+  .result-tagline {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(247,244,242,0.4);
+    letter-spacing: 0.04em;
+    margin-bottom: 28px;
+    position: relative; z-index: 1;
+  }
+  .result-desc {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(247,244,242,0.8);
+    max-width: 440px;
+    margin: 0 auto;
+    line-height: 1.82;
+    position: relative; z-index: 1;
+  }
+
+  .insight-block {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--pink);
+  }
+  .insight-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 12px;
+  }
+  .insight-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--navy);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  .insight-body {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  .cta-block {
+    background: var(--warm);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+  }
+  .cta-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--pink-hot);
+    margin-bottom: 14px;
+  }
+  .cta-block h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: 400;
+    color: var(--navy);
+    line-height: 1.3;
+    margin-bottom: 14px;
+  }
+  .cta-block p {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 380px;
+    margin: 0 auto 24px;
+    line-height: 1.75;
+  }
+  .cta-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .btn-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 40px;
+    background: var(--pink-hot);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 6px;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-cta:hover { background: #c04a63; transform: translateY(-1px); }
+  .btn-cta-secondary {
+    background: none;
+    border: 1.5px solid var(--line);
+    border-radius: 6px;
+    padding: 14px 36px;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--navy);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-cta-secondary:hover { border-color: var(--navy); background: rgba(54,54,87,0.04); }
+  .cta-or {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hidden { display: none !important; }
+
+  @media (max-width: 520px) {
+    .version-cards { grid-template-columns: 1fr; }
+    .result-hero { padding: 36px 24px; }
+    .cta-block { padding: 28px 20px; }
+    .insight-block { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- DARK: version select + hero -->
+<div class="shell-dark" id="shell-dark">
+
+  <div class="dark-header">
+    <div class="logo-mark">
+      <div class="logo-dot"></div>
+      SDC Coaching
+      <!-- When deploying: replace text with <img src="logo.png" style="height:24px;filter:brightness(0) invert(1);opacity:0.45;"> -->
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-tag">Diagnostic Assessment</div>
+    <h1>The Pressure Check<br><em>for recruitment professionals</em></h1>
+    <p class="hero-sub">12 questions. A few honest minutes. A clearer picture of what's actually going on.</p>
+  </div>
+
+  <div class="version-section">
+    <div class="version-prompt">First — who are you?</div>
+    <div class="version-cards">
+      <div class="version-card" onclick="selectVersion('staff')">
+        <div class="version-card-label">Version 1</div>
+        <div class="version-card-title">I'm a team member</div>
+        <div class="version-card-desc">You work in the business. You're on the ground, doing the work.</div>
+      </div>
+      <div class="version-card" onclick="selectVersion('manager')">
+        <div class="version-card-label">Version 2</div>
+        <div class="version-card-title">I lead a team</div>
+        <div class="version-card-desc">You manage people. You're responsible for others as well as results.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- LIGHT: intro, quiz, results -->
+<div class="shell-light hidden" id="shell-light">
+
+  <div class="light-header">
+    <div class="logo-mark-light">
+      <div class="logo-dot"></div>
+      SDC Coaching
+    </div>
+  </div>
+
+  <div class="shell-inner">
+
+    <div id="screen-intro">
+      <div class="intro-hero">
+        <div class="intro-tag" id="intro-tag">Team Member</div>
+        <h2 id="intro-h2">How much are you<br><em>really carrying?</em></h2>
+        <p id="intro-p"></p>
+      </div>
+      <div class="intro-features" id="intro-features"></div>
+      <div class="intro-cta">
+        <div class="btn-start-wrap">
+          <button class="btn-start" onclick="startQuiz()">Begin the Check</button>
+        </div>
+        <p class="time-note">12 questions · approximately 3 minutes</p>
+      </div>
+    </div>
+
+    <div id="screen-quiz" class="hidden">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span class="progress-qnum" id="q-num">Question 1 of 12</span>
+          <span class="progress-version" id="q-version">Team Member</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+        </div>
+      </div>
+      <div id="q-area"></div>
+    </div>
+
+    <div id="screen-results" class="results hidden"></div>
+
+  </div>
+</div>
+
+<script>
+const STAFF_Q = [
+  { text: "When Sunday evening comes around, what's most honest?", options: [
+    { text: "I'm already thinking about Monday", value: 3 },
+    { text: "There's a low-level dread I've got used to", value: 2 },
+    { text: "I'm fine — I just don't think about work much", value: 1 },
+    { text: "I genuinely look forward to it", value: 0 }
+  ]},
+  { text: "When a deal falls through or a placement goes wrong, how long does it stay with you?", options: [
+    { text: "It replays for days — I can't switch it off", value: 3 },
+    { text: "A while. I take it personally even when I know I shouldn't", value: 2 },
+    { text: "I'm annoyed in the moment but move on fairly quickly", value: 1 },
+    { text: "I dust myself off and get back to it", value: 0 }
+  ]},
+  { text: "By the end of most working days, how do you feel?", options: [
+    { text: "Completely drained — like I've given everything and then some", value: 3 },
+    { text: "Tired, but that's just how this job is", value: 2 },
+    { text: "Mixed — good days and tough days", value: 1 },
+    { text: "Mostly fine. Tired but not depleted", value: 0 }
+  ]},
+  { text: "When you're performing well, what's driving it?", options: [
+    { text: "Fear of what happens if I don't", value: 3 },
+    { text: "Proving something — to myself or to others", value: 2 },
+    { text: "A mix of both pressure and genuine enjoyment", value: 1 },
+    { text: "I actually love what I do when I'm in flow", value: 0 }
+  ]},
+  { text: "How often do you find yourself going through the motions?", options: [
+    { text: "More often than I'd like to admit", value: 3 },
+    { text: "It comes in waves — some weeks I'm checked out", value: 2 },
+    { text: "Occasionally, usually when I'm tired", value: 1 },
+    { text: "Rarely — I'm pretty engaged most of the time", value: 0 }
+  ]},
+  { text: "When you're away from work — evenings, weekends — can you actually switch off?", options: [
+    { text: "Not really. My mind's still on it", value: 3 },
+    { text: "Sort of. I check my phone more than I should", value: 2 },
+    { text: "Mostly yes, but it depends on the week", value: 1 },
+    { text: "Yes — I have a fairly clear boundary", value: 0 }
+  ]},
+  { text: "How would you describe your relationship with your targets?", options: [
+    { text: "They follow me around everywhere — even when I'm off the clock", value: 3 },
+    { text: "Stressful. I hit them but it never feels like enough", value: 2 },
+    { text: "Challenging but manageable most months", value: 1 },
+    { text: "Fine. They motivate me without consuming me", value: 0 }
+  ]},
+  { text: "When someone asks 'how are you?' at work, what do you actually say vs what's true?", options: [
+    { text: "There's a big gap — I say 'fine' on autopilot", value: 3 },
+    { text: "I downplay it. People don't really want to know", value: 2 },
+    { text: "It's pretty honest most of the time", value: 1 },
+    { text: "I'm generally okay and that's what I say", value: 0 }
+  ]},
+  { text: "How's your sleep been in the last few weeks?", options: [
+    { text: "Poor — I wake up or can't get off to sleep", value: 3 },
+    { text: "Inconsistent — depends on what's happening at work", value: 2 },
+    { text: "Mostly okay with some rough nights", value: 1 },
+    { text: "Generally good", value: 0 }
+  ]},
+  { text: "If you imagine yourself in this role in two years' time — what comes up first?", options: [
+    { text: "Dread — I can't picture doing this indefinitely", value: 3 },
+    { text: "Uncertainty — I'm not sure I want this, but I'm not sure I don't", value: 2 },
+    { text: "I'd be okay with it if a few things changed", value: 1 },
+    { text: "I could see myself growing into something good here", value: 0 }
+  ]},
+  { text: "Do you feel like the pressure you carry at work is noticed by anyone around you?", options: [
+    { text: "No — I hide it well and nobody asks", value: 3 },
+    { text: "I think people see it but no one mentions it", value: 2 },
+    { text: "Sometimes — a colleague or manager will check in", value: 1 },
+    { text: "Yes — there's a decent culture of looking out for each other", value: 0 }
+  ]},
+  { text: "Honestly — is there something you've been aware of for a while that you haven't done anything about?", options: [
+    { text: "Yes. Several things actually.", value: 3 },
+    { text: "One or two things I keep pushing to the back", value: 2 },
+    { text: "Maybe — nothing I could name specifically", value: 1 },
+    { text: "Not really — I tend to deal with things as they come", value: 0 }
+  ]}
+];
+
+const MANAGER_Q = [
+  { text: "When you look at your team right now, what's your honest read?", options: [
+    { text: "Several people are struggling and I'm not sure what to do", value: 3 },
+    { text: "I can sense something's off but I can't quite name it", value: 2 },
+    { text: "Most are okay — there are one or two I'm keeping an eye on", value: 1 },
+    { text: "The team feels pretty solid from where I'm standing", value: 0 }
+  ]},
+  { text: "How often do you have real conversations with your team about how they're actually doing — not just performance?", options: [
+    { text: "Rarely — the focus is always on numbers and delivery", value: 3 },
+    { text: "Occasionally, but it's not built into how we operate", value: 2 },
+    { text: "Sometimes — usually when something flags up", value: 1 },
+    { text: "Regularly — it's part of how I lead", value: 0 }
+  ]},
+  { text: "If one of your team was burning out right now, would you know?", options: [
+    { text: "Honestly? Probably not until it was too late", value: 3 },
+    { text: "I'd like to think so, but I'm not confident", value: 2 },
+    { text: "I'd probably notice eventually — I pick up on shifts in behaviour", value: 1 },
+    { text: "Yes — I have a close enough read on my people", value: 0 }
+  ]},
+  { text: "When you're under pressure yourself, what does your leadership style do?", options: [
+    { text: "I get shorter, more directive — I know it, I don't love it", value: 3 },
+    { text: "I take on more myself rather than leaning on the team", value: 2 },
+    { text: "I'm aware of it and try to compensate", value: 1 },
+    { text: "I'm fairly consistent whether things are easy or hard", value: 0 }
+  ]},
+  { text: "How do you feel about the level of pressure in your team right now?", options: [
+    { text: "It's too high and I'm not sure how to change it", value: 3 },
+    { text: "It's high — but I've normalised it because it's always been this way", value: 2 },
+    { text: "It's manageable, though some people feel it more than others", value: 1 },
+    { text: "The team handles pressure well — it motivates rather than drains them", value: 0 }
+  ]},
+  { text: "What's actually driving performance in your team, if you're honest?", options: [
+    { text: "Fear — of missing targets, of being managed out", value: 3 },
+    { text: "A mix of pressure and ambition — hard to separate", value: 2 },
+    { text: "Competition and structure — fairly healthy", value: 1 },
+    { text: "Genuine engagement — most people want to do well", value: 0 }
+  ]},
+  { text: "How much of your energy goes on managing people's emotional states vs doing the actual work?", options: [
+    { text: "More than I signed up for — it's draining", value: 3 },
+    { text: "A lot — I feel like I carry the mood of the whole team", value: 2 },
+    { text: "Some — but it feels like a normal part of leadership", value: 1 },
+    { text: "Not much — the team is fairly self-managing emotionally", value: 0 }
+  ]},
+  { text: "When did you last feel genuinely energised by leading your team — not just productive, but lit up by it?", options: [
+    { text: "I can't remember the last time", value: 3 },
+    { text: "It happens occasionally but it's not the norm", value: 2 },
+    { text: "A few weeks ago — it comes and goes", value: 1 },
+    { text: "Fairly regularly — there are moments that remind me why I do this", value: 0 }
+  ]},
+  { text: "How easy is it for someone in your team to tell you they're not okay?", options: [
+    { text: "I doubt many would — the culture doesn't really make space for that", value: 3 },
+    { text: "Some would, but not all — it depends on the person", value: 2 },
+    { text: "Most would, I think — I try to be approachable", value: 1 },
+    { text: "Yes — I've built a team where that kind of honesty is possible", value: 0 }
+  ]},
+  { text: "How's your own wellbeing right now — separate from your team's?", options: [
+    { text: "Not great. I'm carrying a lot.", value: 3 },
+    { text: "I'm managing, but I know I'm running on empty in some areas", value: 2 },
+    { text: "Okay — I have better weeks and harder ones", value: 1 },
+    { text: "Genuinely fine — I feel reasonably resourced", value: 0 }
+  ]},
+  { text: "When someone in your team underperforms, what's your default?", options: [
+    { text: "More pressure — more check-ins, closer scrutiny", value: 3 },
+    { text: "I try to find out what's going on but end up back at the numbers", value: 2 },
+    { text: "I try to understand what's underneath it first", value: 1 },
+    { text: "I take time to understand the full picture before I do anything", value: 0 }
+  ]},
+  { text: "If you could change one thing about how this team operates — and there were no obstacles — what comes to mind first?", options: [
+    { text: "The culture. It's more survival than thriving right now.", value: 3 },
+    { text: "The level of pressure people are under — it's not sustainable", value: 2 },
+    { text: "A few team dynamics or individual situations I haven't resolved", value: 1 },
+    { text: "Something structural — nothing that goes to the heart of how we function", value: 0 }
+  ]}
+];
+
+const INTRO_CONTENT = {
+  staff: {
+    tag: 'Team Member',
+    h2: 'How much are you<br><em>really carrying?</em>',
+    p: 'Recruitment is one of the highest-pressure environments there is. Most people in it get used to running hot — and stop noticing when the heat becomes a problem.<br><br>This isn\'t a test. It\'s 12 questions that help you see what\'s actually going on beneath the surface.',
+    features: [
+      '12 questions across the key dimensions of pressure and performance',
+      'Find out whether you\'re running on fumes, sensing the drift, or genuinely steady',
+      'A clear picture of what\'s driving your experience at work — and what to do with it'
+    ]
+  },
+  manager: {
+    tag: 'Team Leader',
+    h2: 'What\'s really happening<br><em>in your team?</em>',
+    p: 'Recruitment is one of the highest-pressure industries there is. Leaders here tend to carry a lot — often without realising how much is filtering down to the people they lead.<br><br>This isn\'t a test. It\'s 12 questions to help you see what\'s going on — in your team, and in yourself.',
+    features: [
+      '12 questions across leadership, team culture, and your own wellbeing',
+      'Find out whether you\'re leading with presence or leading on fumes',
+      'A clear read on what\'s happening beneath the surface — and what to do next'
+    ]
+  }
+};
+
+const OUTCOMES = {
+  staff: {
+    high: {
+      tier: 'Running on Fumes',
+      tagline: 'Performing. But at a cost.',
+      desc: "You're still delivering. But something underneath has been running hot for a while — and you've got so used to it that it barely registers anymore. The Sunday dread, the inability to switch off, the gap between what you say and what's true. None of that appeared overnight. It built quietly, which is exactly how it gets missed.",
+      insightTitle: "The thing about high performers in high-pressure environments",
+      insightBody: "They're often the last to acknowledge they're struggling — because they're still producing results. But performance and wellbeing aren't the same thing. One can mask the other for a long time. Until it doesn't.",
+      ctaHeading: "Something needs to change. You already know it.",
+      ctaBody: "Most of the people I work with arrive here — still delivering, quietly exhausted. Within weeks they experience a measurable shift in how work feels. Not by doing less, but by understanding what's actually driving the pressure.",
+      ctaBtn: "Book a Free Discovery Call",
+      ctaLink: "https://tidycal.com/YOUR_LINK_STAFF_HIGH",
+      ctaBtnSecondary: "Get the full report by email"
+    },
+    mid: {
+      tier: 'Sensing the Drift',
+      tagline: "Something's off. You already know it.",
+      desc: "You're not in crisis. But you're not quite right either — and you've sensed that for a while without being able to name it precisely. That's the tricky middle ground: not bad enough to act on, not good enough to feel settled. The drift tends to deepen slowly, quietly, until something shifts.",
+      insightTitle: "The cost of 'I'm managing'",
+      insightBody: "Managing is not the same as thriving. Most people in recruitment can manage almost anything — that's what makes them good at the job. But that capacity to cope can become a way of postponing conversations worth having. With themselves, or with someone else.",
+      ctaHeading: "Awareness is the starting point. This is yours.",
+      ctaBody: "The fact that you can sense the drift matters. A single conversation can be enough to show you what's possible — where work feels less like something you endure and more like something you're genuinely good at.",
+      ctaBtn: "Book a Free Discovery Call",
+      ctaLink: "https://tidycal.com/YOUR_LINK_STAFF_MID",
+      ctaBtnSecondary: "Get the full report by email"
+    },
+    low: {
+      tier: 'Steady — For Now',
+      tagline: 'In good shape. Worth protecting.',
+      desc: "Right now you're in decent shape — genuinely. You have more clarity and steadiness than most people working in environments like this. That's not nothing. The question worth sitting with is: what's making that possible, and how do you protect it as things evolve around you?",
+      insightTitle: "What got you here won't automatically keep you here",
+      insightBody: "The people who stay resourced in high-pressure industries tend to be the ones who invest in what keeps them grounded before they need it — not after. You're in a strong position to do that from a place of strength rather than necessity.",
+      ctaHeading: "You're in a good place. Let's keep it that way.",
+      ctaBody: "Having a framework for staying grounded when pressure builds is one of the most valuable things you can have. I'd love to share mine with you.",
+      ctaBtn: "Book a Free Discovery Call",
+      ctaLink: "https://tidycal.com/YOUR_LINK_STAFF_LOW",
+      ctaBtnSecondary: "Get the full report by email"
+    }
+  },
+  manager: {
+    high: {
+      tier: 'High-Functioning, Disconnected',
+      tagline: 'Leading. But something important is missing.',
+      desc: "You're still doing the job. The team is still producing. But somewhere along the way the connection — to your people, to what matters about leading them, possibly to yourself — has thinned out. That's not a character flaw. It's what happens when leaders carry sustained pressure without somewhere to put it down.",
+      insightTitle: "What your team doesn't say out loud",
+      insightBody: "Teams tend to mirror their leaders — in energy, in openness, in how much they're willing to acknowledge what's hard. If there's a gap between how your team presents and how they're actually doing, it usually starts somewhere near the top.",
+      ctaHeading: "Your team needs you at your best. So does your work.",
+      ctaBody: "Leaders who carry this level of pressure rarely solve it alone. A single conversation often opens up a different way of seeing — and leading — that changes things faster than you'd expect.",
+      ctaBtn: "Book a Free Discovery Call",
+      ctaLink: "https://tidycal.com/YOUR_LINK_MANAGER_HIGH",
+      ctaBtnSecondary: "Get the full report by email"
+    },
+    mid: {
+      tier: 'Aware, Not Yet Acting',
+      tagline: 'You can sense what needs to change.',
+      desc: "You have a reasonable read on what's happening — in your team and in yourself. The awareness is there. What's less clear is what to do with it. That gap between knowing and doing is where a lot of leaders sit for longer than is useful — not from avoidance, but from not quite knowing where to start.",
+      insightTitle: "The cost of clarity without action",
+      insightBody: "Knowing something's off without addressing it has its own weight. It sits in the background of every team meeting, every one-to-one, every performance conversation. Leaders who move from awareness to action — even small action — tend to feel the shift quickly.",
+      ctaHeading: "You've named it. The next step is smaller than you think.",
+      ctaBody: "The aware leader is often the most interesting person to work with. You already sense the gap. A single conversation can show you exactly where to start.",
+      ctaBtn: "Book a Free Discovery Call",
+      ctaLink: "https://tidycal.com/YOUR_LINK_MANAGER_MID",
+      ctaBtnSecondary: "Get the full report by email"
+    },
+    low: {
+      tier: 'Leading Well',
+      tagline: 'Solid. With room to go deeper.',
+      desc: "You're more intentional about how you lead than most. Your team likely feels it — even if they couldn't articulate why. The opportunity from here isn't to fix something broken. It's to go from good to genuinely exceptional — in a way that compounds for the people around you.",
+      insightTitle: "The leaders who create lasting cultures",
+      insightBody: "They tend to be curious about what's possible — not just what's working. The move from solid to exceptional is usually an internal one: understanding your own patterns, energy, and presence at a deeper level, which then flows outward into how you lead.",
+      ctaHeading: "Good leadership is worth building on.",
+      ctaBody: "You're in a strong position. Having a framework for staying at your best — and taking your team with you — is worth investing in before the next wave of pressure arrives.",
+      ctaBtn: "Book a Free Discovery Call",
+      ctaLink: "https://tidycal.com/YOUR_LINK_MANAGER_LOW",
+      ctaBtnSecondary: "Get the full report by email"
+    }
+  }
+};
+
+// ── STATE ──
+let version = null;
+let questions = [];
+let answers = [];
+let current = 0;
+let isTransitioning = false;
+
+// ── FLOW ──
+function selectVersion(v) {
+  version = v;
+  questions = v === 'staff' ? STAFF_Q : MANAGER_Q;
+  answers = new Array(questions.length).fill(null);
+
+  const c = INTRO_CONTENT[v];
+  document.getElementById('intro-tag').textContent = c.tag;
+  document.getElementById('intro-h2').innerHTML = c.h2;
+  document.getElementById('intro-p').innerHTML = c.p;
+  document.getElementById('intro-features').innerHTML = c.features
+    .map(f => `<div class="intro-feat"><div class="feat-dot"></div><span>${f}</span></div>`)
+    .join('');
+
+  document.getElementById('shell-dark').classList.add('hidden');
+  document.getElementById('shell-light').classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+
+function startQuiz() {
+  document.getElementById('screen-intro').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.remove('hidden');
+  document.getElementById('q-version').textContent = version === 'staff' ? 'Team Member' : 'Team Leader';
+  render(0);
+}
+
+function render(idx) {
+  const q = questions[idx];
+  document.getElementById('q-num').textContent = `Question ${idx + 1} of ${questions.length}`;
+  document.getElementById('prog-fill').style.width = `${(idx / questions.length) * 100}%`;
+  document.getElementById('q-area').innerHTML = `
+    <div class="q-card">
+      <div class="q-text">${q.text}</div>
+      <div class="options-list">
+        ${q.options.map((opt, i) => `
+          <button class="o-btn ${answers[idx] === i ? 'selected' : ''}"
+            onclick="pick(${idx},${i},${opt.value})">
+            ${opt.text}
+          </button>
+        `).join('')}
+      </div>
+      ${idx > 0 ? `<button class="btn-back" onclick="go(${idx - 1})">← Back</button>` : ''}
+    </div>
+  `;
+}
+
+function pick(idx, optIdx, value) {
+  if (isTransitioning) return;
+  isTransitioning = true;
+  answers[idx] = optIdx;
+  document.querySelectorAll('.o-btn').forEach((b, i) => b.classList.toggle('selected', i === optIdx));
+  setTimeout(() => {
+    document.getElementById('q-area').innerHTML = '';
+    setTimeout(() => {
+      current = idx + 1;
+      if (current >= questions.length) showResults();
+      else render(current);
+      isTransitioning = false;
+    }, 180);
+  }, 200);
+}
+
+function go(idx) { current = idx; render(idx); }
+
+function totalScore() {
+  return questions.reduce((t, q, i) => t + (answers[i] !== null ? q.options[answers[i]].value : 0), 0);
+}
+
+function outcomeKey() {
+  const pct = totalScore() / (questions.length * 3);
+  return pct >= 0.6 ? 'high' : pct >= 0.3 ? 'mid' : 'low';
+}
+
+function showResults() {
+  document.getElementById('screen-quiz').classList.add('hidden');
+  const key = outcomeKey();
+  const out = OUTCOMES[version][key];
+  const vLabel = version === 'staff' ? 'Team Member' : 'Team Leader';
+  const el = document.getElementById('screen-results');
+  el.classList.remove('hidden');
+  el.innerHTML = `
+    <div class="result-hero">
+      <div class="result-eyebrow">Your Pressure Check Result</div>
+      <div class="result-version-label">${vLabel}</div>
+      <div class="result-tier"><em>${out.tier}</em></div>
+      <div class="result-tagline">${out.tagline}</div>
+      <p class="result-desc">${out.desc}</p>
+    </div>
+    <div class="insight-block">
+      <div class="insight-eyebrow">Worth knowing</div>
+      <div class="insight-title">${out.insightTitle}</div>
+      <p class="insight-body">${out.insightBody}</p>
+    </div>
+    <div class="cta-block">
+      <div class="cta-eyebrow">What Next</div>
+      <h3>${out.ctaHeading}</h3>
+      <p>${out.ctaBody}</p>
+      <div class="cta-buttons">
+        <a class="btn-cta" href="${out.ctaLink}" target="_blank">${out.ctaBtn}</a>
+        <div class="cta-or">or</div>
+        <button class="btn-cta-secondary" onclick="handleEmailCTA('${key}')">
+          ${out.ctaBtnSecondary}
+        </button>
+      </div>
+    </div>
+  `;
+  window.scrollTo(0, 0);
+}
+
+function handleEmailCTA(tier) {
+  // Replace with Kit form embed or redirect per version+tier
+  // e.g. window.location.href = 'https://app.kit.com/forms/YOUR_FORM_ID/subscriptions'
+  alert('Connect Kit form here — version: ' + version + ', tier: ' + tier);
+}
+</script>
+</body>
+</html>
